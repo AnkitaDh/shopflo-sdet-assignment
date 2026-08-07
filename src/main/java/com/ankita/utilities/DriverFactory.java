@@ -15,12 +15,22 @@ public final class DriverFactory {
     }
 
     public static WebDriver initializeDriver() {
+
         if (DRIVER.get() == null) {
-            String browserName = ConfigReader.getProperty("browser", "chrome").trim().toLowerCase();
+
+            String browserName =
+                    ConfigReader.getProperty("browser", "chrome")
+                            .trim()
+                            .toLowerCase();
 
             WebDriver driver = createDriver(browserName);
 
-            driver.manage().window().maximize();
+            // Maximize only for local execution.
+            // GitHub Actions runs Chrome in headless mode.
+            if (System.getenv("CI") == null) {
+                driver.manage().window().maximize();
+            }
+
             driver.manage().deleteAllCookies();
 
             DRIVER.set(driver);
@@ -34,6 +44,7 @@ public final class DriverFactory {
     }
 
     public static void quitDriver() {
+
         WebDriver driver = DRIVER.get();
 
         if (driver != null) {
@@ -45,7 +56,9 @@ public final class DriverFactory {
     private static WebDriver createDriver(String browserName) {
 
         return switch (browserName) {
+
             case "chrome" -> createChromeDriver();
+
             default -> throw new IllegalArgumentException(
                     "Unsupported browser: " + browserName
             );
@@ -58,16 +71,33 @@ public final class DriverFactory {
 
         ChromeOptions options = new ChromeOptions();
 
-        options.addArguments("--start-maximized");
         options.addArguments("--disable-infobars");
         options.addArguments("--disable-notifications");
+
+        /*
+         * GitHub Actions runs on a Linux CI environment.
+         * Chrome needs headless mode and additional arguments
+         * to start reliably in the runner.
+         */
+        if (System.getenv("CI") != null) {
+
+            options.addArguments("--headless=new");
+            options.addArguments("--no-sandbox");
+            options.addArguments("--disable-dev-shm-usage");
+            options.addArguments("--window-size=1920,1080");
+
+        } else {
+
+            // Normal visible Chrome when running locally
+            options.addArguments("--start-maximized");
+        }
 
         /*
          * Disable Chrome Password Manager features for the
          * automation browser session.
          *
-         * This prevents Chrome's password breach warning from
-         * interfering with Selenium test execution.
+         * This prevents password breach/warning popups from
+         * interfering with Selenium execution.
          */
         options.setExperimentalOption("prefs", Map.of(
                 "credentials_enable_service", false,
