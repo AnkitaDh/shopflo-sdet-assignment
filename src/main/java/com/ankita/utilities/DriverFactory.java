@@ -71,34 +71,19 @@ public final class DriverFactory {
 
         ChromeOptions options = new ChromeOptions();
 
-        options.addArguments("--disable-infobars");
-        options.addArguments("--disable-notifications");
-
-        /*
-         * GitHub Actions runs on a Linux CI environment.
-         * Chrome needs headless mode and additional arguments
-         * to start reliably in the runner.
-         */
         if (System.getenv("CI") != null) {
-
             options.addArguments("--headless=new");
             options.addArguments("--no-sandbox");
             options.addArguments("--disable-dev-shm-usage");
+            options.addArguments("--disable-gpu");
             options.addArguments("--window-size=1920,1080");
-
         } else {
-
-            // Normal visible Chrome when running locally
             options.addArguments("--start-maximized");
         }
 
-        /*
-         * Disable Chrome Password Manager features for the
-         * automation browser session.
-         *
-         * This prevents password breach/warning popups from
-         * interfering with Selenium execution.
-         */
+        options.addArguments("--disable-infobars");
+        options.addArguments("--disable-notifications");
+
         options.setExperimentalOption("prefs", Map.of(
                 "credentials_enable_service", false,
                 "profile.password_manager_enabled", false,
