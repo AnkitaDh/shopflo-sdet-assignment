@@ -14,8 +14,13 @@ public class CheckoutCompletePage {
     private final WebDriver driver;
     private final WebDriverWait wait;
 
+
+
     @FindBy(className = "title")
     private WebElement checkoutCompleteTitle;
+
+    @FindBy(xpath = "//span[@class='title' and text()='Checkout: Complete!']")
+    private WebElement completeTitle;
 
     @FindBy(className = "complete-header")
     private WebElement thankYouMessage;

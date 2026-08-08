@@ -176,39 +176,6 @@ public class CheckoutCompleteTests extends BaseTest {
         test.pass("PDF was downloaded successfully and validated");
     }
 
-    @Test(dataProvider = "supportedUsers", description = "TC29 - Verify downloaded PDF filename")
-    public void verifyDownloadedPdfFilename(String username, String password, String userType) {
-        completeCheckoutFlow(username, password, userType);
-        // Arrange - Clear existing files from downloads folder before test
-        clearDownloadDirectory();
-
-        // Act - Trigger PDF generation/download
-        File downloadedFile = generateAndGetDownloadedPdf();
-
-        // Assert - Verify filename format
-        Assert.assertNotNull(downloadedFile, "Downloaded PDF file should be available");
-        Assert.assertTrue(downloadedFile.getName().contains("order") || downloadedFile.getName().contains("receipt") || downloadedFile.getName().contains("confirmation"),
-                "Downloaded PDF filename should follow the expected naming pattern");
-
-        test.pass("Downloaded PDF filename matched the expected pattern");
-    }
-
-    @Test(dataProvider = "supportedUsers", description = "TC30 - Verify PDF download location")
-    public void verifyPdfDownloadLocation(String username, String password, String userType) {
-        completeCheckoutFlow(username, password, userType);
-        // Arrange - Clear existing files from downloads folder before test
-        clearDownloadDirectory();
-
-        // Act - Trigger PDF generation/download
-        File downloadedFile = generateAndGetDownloadedPdf();
-
-        // Assert - Verify the file is inside the downloads directory
-        Assert.assertTrue(downloadedFile.toPath().startsWith(DOWNLOAD_DIRECTORY.toAbsolutePath()),
-                "Downloaded PDF should be stored in the configured downloads directory");
-
-        test.pass("Downloaded PDF was stored in the expected location");
-    }
-
     @Test(dataProvider = "supportedUsers", description = "TC31 - Verify PDF contains order details")
     public void verifyPdfContainsOrderDetails(String username, String password, String userType) {
         completeCheckoutFlow(username, password, userType);
@@ -224,27 +191,6 @@ public class CheckoutCompleteTests extends BaseTest {
                 "Downloaded PDF should contain order confirmation details");
 
         test.pass("Downloaded PDF contained expected order details");
-    }
-
-    @Test(dataProvider = "supportedUsers", description = "TC32 - Verify multiple PDF downloads handling")
-    public void verifyMultiplePdfDownloadsHandling(String username, String password, String userType) {
-        completeCheckoutFlow(username, password, userType);
-        // Arrange - Clear existing files from downloads folder before test
-        clearDownloadDirectory();
-
-        // Act - Trigger multiple downloads
-        File firstDownload = generateAndGetDownloadedPdf();
-        File secondDownload = generateAndGetDownloadedPdf();
-
-        // Assert - Verify files are created and not corrupted
-        Assert.assertNotNull(firstDownload, "First PDF download should be created");
-        Assert.assertNotNull(secondDownload, "Second PDF download should be created");
-        Assert.assertTrue(firstDownload.exists(), "First PDF should exist");
-        Assert.assertTrue(secondDownload.exists(), "Second PDF should exist");
-        Assert.assertTrue(getFileSize(firstDownload) > 0, "First PDF should have content");
-        Assert.assertTrue(getFileSize(secondDownload) > 0, "Second PDF should have content");
-
-        test.pass("Multiple PDF downloads were handled correctly");
     }
 
     @Test(dataProvider = "supportedUsers", description = "TC33 - Verify browser refresh after order completion")

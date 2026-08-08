@@ -78,6 +78,7 @@ public final class DriverFactory {
             options.addArguments("--disable-gpu");
             options.addArguments("--window-size=1920,1080");
         } else {
+            options.addArguments("--headless=new");
             options.addArguments("--start-maximized");
         }
 

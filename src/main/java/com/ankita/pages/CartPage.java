@@ -17,14 +17,17 @@ public class CartPage {
     private final WebDriver driver;
     private final WebDriverWait wait;
 
-    @FindBy(className = "title")
-    private WebElement cartTitle;
+//    @FindBy(xpath = "//span[@class='title' and text()='Checkout: Overview']")
+//    private WebElement cartTitle;
 
     @FindBy(className = "cart_item")
     private List<WebElement> cartItems;
 
     @FindBy(id = "continue-shopping")
     private WebElement continueShoppingButton;
+
+    @FindBy(xpath = "//span[@class='title' and text()='Your Cart']")
+    private WebElement cartTitle;
 
     @FindBy(id = "checkout")
     private WebElement checkoutButton;

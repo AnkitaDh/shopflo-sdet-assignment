@@ -28,6 +28,9 @@ public class ProductsPage {
     @FindBy(className = "shopping_cart_link")
     private WebElement shoppingCartIcon;
 
+//    @FindBy(xpath = "//span[@class='title' and text()='Products']")
+//    private WebElement pageTitle;
+
     @FindBy(className = "shopping_cart_badge")
     private WebElement shoppingCartBadge;
 

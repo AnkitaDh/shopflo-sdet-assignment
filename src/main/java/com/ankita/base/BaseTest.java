@@ -2,7 +2,6 @@ package com.ankita.base;
 
 import com.ankita.utilities.ConfigReader;
 import com.ankita.utilities.DriverFactory;
-import io.restassured.RestAssured;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -17,7 +16,6 @@ public class BaseTest {
     protected WebDriver driver;
     protected WebDriverWait wait;
 
-
     @BeforeMethod(alwaysRun = true)
     public void setUp() {
         driver = DriverFactory.initializeDriver();
@@ -25,15 +23,15 @@ public class BaseTest {
 
         String url = ConfigReader.getProperty("url");
         driver.get(url);
-        wait.until(ExpectedConditions.urlContains("saucedemo.com"));
 
+        wait.until(ExpectedConditions.urlContains("saucedemo.com"));
     }
 
     public void acceptAlert() {
+        WebDriverWait alertWait =
+                new WebDriverWait(driver, Duration.ofSeconds(5));
 
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
-
-        Alert alert = wait.until(
+        Alert alert = alertWait.until(
                 ExpectedConditions.alertIsPresent()
         );
 

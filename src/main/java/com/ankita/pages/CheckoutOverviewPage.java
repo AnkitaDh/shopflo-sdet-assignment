@@ -16,7 +16,10 @@ public class CheckoutOverviewPage {
     private final WebDriver driver;
     private final WebDriverWait wait;
 
-    @FindBy(className = "title")
+//    @FindBy(className = "title")
+//    private WebElement checkoutOverviewTitle;
+
+    @FindBy(xpath = "//span[@class='title' and text()='Checkout: Overview']")
     private WebElement checkoutOverviewTitle;
 
     @FindBy(className = "summary_value_label")

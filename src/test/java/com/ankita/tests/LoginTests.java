@@ -29,6 +29,14 @@ public class LoginTests extends BaseTest {
 
         ProductsPage productsPage = new ProductsPage(driver);
 
+        if (username.equals("locked_out_user")) {
+            Assert.assertTrue(!productsPage.isProductsPageDisplayed(),
+                    "locked_out_user should NOT be able to log in");
+
+        } else {
+
+        }
+
         if (productsPage.isProductsPageDisplayed()) {
 
             System.out.println("PASS : " + username + " logged in successfully.");
